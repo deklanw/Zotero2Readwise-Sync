@@ -1,5 +1,4 @@
 name: Zotero to Readwise Automation
-
 on:
   push:
     branches:
@@ -16,16 +15,20 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: 🐍 Set up Python 3.8
-        uses: actions/setup-python@v5
+      - name: 📦 Install Poetry
+        uses: snok/install-poetry@v1
         with:
-          python-version: '3.8'
+          version: 1.7.1
+          virtualenvs-create: true
+          virtualenvs-in-project: true
 
-      - name: 💿 Install Zotero2Readwise Python package
-        run: pip install zotero2readwise
+      - name: 📥 Clone Zotero2Readwise repository
+        run: git clone https://github.com/deklanw/Zotero2Readwise.git
 
-      - name: 📥 Download the Python script needed for automation
-        run:  curl https://raw.githubusercontent.com/e-alizadeh/Zotero2Readwise/master/zotero2readwise/run.py -o run.py
-      
+      - name: 🔧 Install dependencies with Poetry
+        working-directory: ./Zotero2Readwise
+        run: poetry install
+
       - name: 🚀 Run Automation
-        run: python run.py ${{ secrets.READWISE_TOKEN }} ${{ secrets.ZOTERO_KEY }} ${{ secrets.ZOTERO_ID }}
+        working-directory: ./Zotero2Readwise
+        run: poetry run python zotero2readwise/run.py ${{ secrets.READWISE_TOKEN }} ${{ secrets.ZOTERO_KEY }} ${{ secrets.ZOTERO_ID }} --filter_tags "rw" --filter_tags "readwise"
