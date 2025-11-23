@@ -12,24 +12,12 @@ jobs:
   zotero-to-readwise-automation:
     runs-on: ubuntu-latest
     steps:
-      - name: 🍽️ Checkout the repo
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
+      - name: 🐍 Install uv
+        uses: astral-sh/setup-uv@v4
 
-      - name: 🐍 Set up Python 3.12
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: 💿 Install dependencies
-        run: pip install setuptools
-
-      - name: 💿 Install Zotero2Readwise Python package
-        run: pip install git+https://github.com/e-alizadeh/Zotero2Readwise.git
-
-      - name: 📥 Download the Python script needed for automation
-        run:  curl https://raw.githubusercontent.com/e-alizadeh/Zotero2Readwise/master/zotero2readwise/run.py -o run.py
-      
-      - name: 🚀 Run Automation
-        run: python run.py ${{ secrets.READWISE_TOKEN }} ${{ secrets.ZOTERO_KEY }} ${{ secrets.ZOTERO_ID }}
+      - name: 🔄 Sync Zotero to Readwise
+        env:
+          READWISE_TOKEN: ${{ secrets.READWISE_TOKEN }}
+          ZOTERO_KEY: ${{ secrets.ZOTERO_KEY }}
+          ZOTERO_LIBRARY_ID: ${{ secrets.ZOTERO_LIBRARY_ID }}
+        run: uvx zotero2readwise
