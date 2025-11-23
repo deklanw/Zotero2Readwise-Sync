@@ -6,7 +6,7 @@ on:
       - master
   schedule:
     - cron: "0 3 * * 1" # Runs at 03:00 AM (UTC) every day (Check https://crontab.guru/)
-  workflow_dispatch:
+  workflow_dispatch:  # For manual trigger
 
 jobs:
   zotero-to-readwise-automation:
@@ -17,10 +17,13 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: 🐍 Set up Python 3.9
+      - name: 🐍 Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.12'
+
+      - name: 💿 Install dependencies
+        run: pip install setuptools
 
       - name: 💿 Install Zotero2Readwise Python package
         run: pip install git+https://github.com/e-alizadeh/Zotero2Readwise.git
