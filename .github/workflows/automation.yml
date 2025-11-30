@@ -20,4 +20,4 @@ jobs:
           READWISE_TOKEN: ${{ secrets.READWISE_TOKEN }}
           ZOTERO_KEY: ${{ secrets.ZOTERO_KEY }}
           ZOTERO_LIBRARY_ID: ${{ secrets.ZOTERO_ID }}
-        run: uvx zotero2readwise
+        run: uvx zotero2readwise --filter_tags "rw" --filter_tags "readwise"
